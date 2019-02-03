@@ -10,49 +10,39 @@ include(__DIR__ . '/view_init.php');
 
 global $SESSION;
 
-echo $OUTPUT->heading('Start');
+echo $OUTPUT->heading('Allgemeiner Betreuerpool');
 
-echo('Example of using HTTP Request to get Camunda User Object via REST API and print out in table');
-//Example of using .ini
-$ini = parse_ini_file(__DIR__ . '/.ini');
-$camunda_url = $ini['camunda_url'];
+//Such-Funktion
+require_once(__DIR__ . '/forms/filter_form.php');
 
-$client = new GuzzleHttp\Client();
-// Send an asynchronous request.
-$request = new \GuzzleHttp\Psr7\Request('GET', $camunda_url . 'engine-rest/user');
-$promise = $client->sendAsync($request)->then(function($response) {
-    $body = $response->getBody();
-    $data = json_decode($body, true);
-    //Tabelle mit camunda
-    $table = new html_table();
-    $table->head = array('ID', 'Firstname', 'Name');
-
-    foreach ($data as $user) {
-        $table->data[] = array($user['id'], $user['firstName'], $user['lastName']);
-    }
-    echo html_writer::table($table);
-});
-$promise->wait();
-
-// Implement form for user
-require_once(__DIR__ . '/forms/start_form.php');
-
-$mform = new start_form();
-
+//Such-Form
+$mform = new filter_form();
 $mform->render();
+
+if ($SESSION->fromform) {
+    $mform->set_data($SESSION->fromform);
+    //Remove old formdata from SESSION
+    //unset($SESSION->fromform);
+}
 
 //Form processing and displaying is done here
 if ($mform->is_cancelled()) {
     //Handle form cancel operation, if cancel button is present on form
 } else if ($fromform = $mform->get_data()) {
     //Handle form successful operation, if button is present on form
-    $SESSION->formdata = $fromform;
-    $returnurl = new moodle_url('/mod/spsupman/view_detail.php', array('id' => $cm->id));
+    //Create Filteroptions
+    $filteroptions = new stdClass();
+    $filteroptions->firstname = $fromform->firstname;
+    $filteroptions->lastname = $fromform->lastname;
+    //Push Filteroptions and formdata to the Session
+    $SESSION->filteroptions = $filteroptions;
+    $SESSION->fromform = $fromform;
+    // Redirect with filter options.
+    $returnurl = new moodle_url('/mod/spsupman/view.php', array('id' => $cm->id));
     redirect($returnurl);
 } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
     // or on the first display of the form.
-
     // Set default data (if any)
     // Required for module not to crash as a course id is always needed
     $formdata = array('id' => $id);
@@ -61,5 +51,74 @@ if ($mform->is_cancelled()) {
     $mform->display();
 }
 
+// Tablle
+$table = 'spsupman_supervisors';
+
+/*$record = new stdClass();
+$record->firstname = 'Max';
+$record->lastname = 'Mustermann';
+$record->title = 'Herr';
+$record->gender = 'M';
+$record->birthdate = '13.03.1990';
+$record->languages = 'DE';
+$record->company = 'Lufthansa';
+$record->address = 'Hauptsraße 13';
+$record->city = 'Mannheim';
+$record->postalcode = '68159';
+$record->phone = '06316371231';
+$record->email = 'max.mustermann@gmail.com';
+$record->iban = '10000';
+$record->specialisation = 'Krypotographie, Cybersecurity';
+$record->topictype = 'IT';
+$record->supportperiod = '1';
+$record->bachelor = '1';
+$record->peryear = '12';
+$record->atthesametime = '12';
+$record->timecreated = time();
+$record->timemodified = time();
+$lastinsertid = $DB->insert_record($table, $record, false);*/
+
+if (!$SESSION->filteroptions) {
+    $supervisors = $DB->get_records($table);
+} else {
+    $searchfirstname = $SESSION->filteroptions->firstname;
+    $searchlastname = $SESSION->filteroptions->lastname;
+
+    $sql = 'SELECT * FROM {spsupman_supervisors}
+                 WHERE ' . $DB->sql_like('firstname', ':firstname', false) . ' AND ' .
+            $DB->sql_like('lastname', ':lastname', false);
+
+    $params = array('firstname' => '%' . $searchfirstname . '%', 'lastname' => '%' . $searchlastname . '%');
+
+    $supervisors = $DB->get_records_sql($sql, $params);
+
+    unset($SESSION->filteroptions);
+}
+
+$table = new html_table();
+$table->head = array('ID', 'Name', 'Vorname', 'Titel', 'Email', 'Fachbereich', '', '');
+//Für jeden Datensatz
+foreach ($supervisors as $supervisor) {
+    $id = $supervisor->id;
+    $name = $supervisor->lastname;
+    $vorname = $supervisor->firstname;
+    $titel = $supervisor->title;
+    $email = $supervisor->email;
+    $fachbereich = $supervisor->topictype;
+    //Link zum löschen des Verantwortlichen in foreach-Schleife setzen
+    $detailButton =
+            $OUTPUT->single_button(new moodle_url('/mod/spsupman/view_detail.php', array('id' => $cm->id, 'supervisorid' => $id)),
+                    'Bearbeiten', $attributes = null);
+    $deleteButton =
+            $OUTPUT->single_button(new moodle_url('/mod/spsupman/view_detail.php', array('id' => $cm->id, 'supervisorid' => $id)),
+                    'Löschen', $attributes = null);
+    //Daten zuweisen an HTML-Tabelle
+    $table->data[] = array($id, $name, $vorname, $titel, $email, $fachbereich, $detailButton, $deleteButton);
+}
+//Tabelle ausgeben
+echo html_writer::table($table);
+
+echo $OUTPUT->single_button(new moodle_url('/mod/spsupman/view_detail.php', array('id' => $cm->id)),
+        'Betreuer anlegen', $attributes = null);
 // Finish the page.
 echo $OUTPUT->footer();

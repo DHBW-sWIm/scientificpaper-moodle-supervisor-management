@@ -13,25 +13,10 @@ global $SESSION;
 echo $OUTPUT->heading('Details');
 
 // Implement form for user
-require_once(__DIR__ . '/forms/detail_form.php');
-
-//Tabelle
-$table = new html_table();
-$table->head = array('ID', 'Name', 'Email');
-//Datensatz zuweisen
-
-$id = $SESSION->formdata->id;
-$name = $SESSION->formdata->name;
-$email = $SESSION->formdata->email;
-
-//Daten zuweisen an HTML-Tabelle
-$table->data[] = array($id, $name, $email);
-
-//Tabelle ausgeben
-echo html_writer::table($table);
+require_once(__DIR__ . '/forms/detail_supervisor_form.php');
 
 //Form
-$mform = new detail_form();
+$mform = new detail_supervisor_form();
 $mform->render();
 
 //Form processing and displaying is done here
@@ -46,7 +31,7 @@ if ($mform->is_cancelled()) {
 } else if ($fromform = $mform->get_data()) {
     //Handle form successful operation, if button is present on form
     // Redirect to the course result page.
-    $returnurl = new moodle_url('/mod/spsupman/view_end.php', array('id' => $cm->id));
+    $returnurl = new moodle_url('/mod/spsupman/view.php', array('id' => $cm->id));
     redirect($returnurl);
 } else {
     // this branch is executed if the form is submitted but the data doesn't validate and the form should be redisplayed
