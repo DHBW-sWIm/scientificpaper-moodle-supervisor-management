@@ -121,7 +121,7 @@ foreach ($applicants as $applicant) {
     $timecreated = $returnValue = strftime('%d.%m.%Y', $applicant->timecreated);
     //Link zum löschen des Verantwortlichen in foreach-Schleife setzen
     $workButton =
-            $OUTPUT->single_button(new moodle_url('/mod/spsupman/view_detail.php', array('id' => $cm->id, 'applicantid' => $id)),
+            $OUTPUT->single_button(new moodle_url('/mod/spsupman/view_show_applicant.php', array('id' => $cm->id, 'applicantid' => $id)),
                     'Anzeigen', $attributes = null);
     $deleteAppButton =
             $OUTPUT->single_button(new moodle_url('/mod/spsupman/view_delete_applicant.php',

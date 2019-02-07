@@ -16,7 +16,7 @@ $supervisor = $DB->get_record($table, $params);
 
 global $SESSION;
 
-echo $OUTPUT->heading('Details');
+echo $OUTPUT->heading('Details zum Betreuer');
 
 // Implement form for user
 require_once(__DIR__ . '/forms/show_supervisor_form.php');

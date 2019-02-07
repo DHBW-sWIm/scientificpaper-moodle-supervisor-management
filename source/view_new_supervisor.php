@@ -10,7 +10,7 @@ include(__DIR__ . '/view_init.php');
 
 global $SESSION;
 
-echo $OUTPUT->heading('Details');
+echo $OUTPUT->heading('Neuen Betreuer anlegen');
 
 // Implement form for user
 require_once(__DIR__ . '/forms/new_supervisor_form.php');
