@@ -14,21 +14,14 @@ class filter_form extends moodleform {
 
         $mform->addElement('text', 'firstname', 'Vorname');
         $mform->setType('firstname', PARAM_NOTAGS);
-        //$mform->setDefault('name', '');
-
-        //$mform->addElement('checkbox', 'mysupervisors', 'Nur meine Betreuer anzeigen');
-
-        //$mform->setDefault('name', '');
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-        $mform->addElement('submit', 'btnSubmit', 'Suchen');
+        $buttonarray=array();
+        $buttonarray[] = $mform->createElement('cancel', 'cancelbutton', 'Reset');
+        $buttonarray[] = $mform->createElement('submit', 'submitbutton', 'Suchen');
+        $mform->addGroup($buttonarray, 'buttonar', '', ' ', false);
 
-    }
-
-    //Custom validation should be added here
-    function validation($data, $files) {
-        return array();
     }
 }
