@@ -2,7 +2,7 @@
 require_once("$CFG->libdir/formslib.php");
 
 class show_applicant_form extends moodleform {
-
+    //Add elements to form
     public function definition() {
         global $CFG;
         $mform = $this->_form; // Don't forget the underscore!
@@ -21,24 +21,17 @@ class show_applicant_form extends moodleform {
         $mform->addElement('static', 'gender', 'Geschlecht');
         #GEBURTSDATUM
         $mform->addElement('static', 'birthdate', 'Geburtsdatum');
-        #space ---------------------------------------------------------------------------------
-        $mform->addElement('static', 'label1', ' ', ' ');
         #SPRACHEN
         $mform->addElement('static', 'languages', 'Sprachen'); // Add elements to your form
         $mform->setType('languages', PARAM_NOTAGS);                   //Set type of element
-        #space ---------------------------------------------------------------------------------
-        $mform->addElement('static', 'label1', ' ', ' ');
         #FIRMA
         $mform->addElement('static', 'company', 'Unternehmen'); // Add elements to your form
         $mform->setType('company', PARAM_NOTAGS);                   //Set type of element
-
-        #MAX ANZAHL ZEITGLEICH
-        $mform->addElement('static', 'timecreated', 'Erstellt am:');
-        $mform->addElement('static', 'timemodified', 'Zuletzt bearbeitet am:');
+        #space ---------------------------------------------------------------------------------
+        $mform->addElement('static', 'label1', ' ', ' ');
         #STRASSE / HAUSNUMMER
         $mform->addElement('static', 'address', 'Strasse'); // Add elements to your form
         $mform->setType('address', PARAM_NOTAGS);                   //Set type of element
-        $mform->addElement('static', 'label1', ' ', ' ');
         #ORT
         $mform->addElement('static', 'city', 'Ort'); // Add elements to your form
         $mform->setType('city', PARAM_NOTAGS);                   //Set type of element
@@ -49,9 +42,8 @@ class show_applicant_form extends moodleform {
         $mform->addElement('static', 'phone', 'Telefon'); // Add elements to your form
         $mform->setType('phone', PARAM_NOTAGS);                   //Set type of element
         #EMAIL
-        $mform->addElement('static', 'email', 'Email'); // Add elements to your form
+        $mform->addElement('static', 'email', 'E-mail'); // Add elements to your form
         $mform->setType('email', PARAM_NOTAGS);                   //Set type of element
-        #space ---------------------------------------------------------------------------------
         $mform->addElement('header', 'header5', 'Bankdaten');
         #IBAN
         $mform->addElement('static', 'iban', 'IBAN'); // Add elements to your form
@@ -65,30 +57,31 @@ class show_applicant_form extends moodleform {
         #FACHGEBIETE
         $mform->addElement('static', 'specialisation', 'Fachgebiete'); // Add elements to your form
         $mform->setType('specialisation', PARAM_NOTAGS);                   //Set type of element
-        #space ---------------------------------------------------------------------------------
-        $mform->addElement('static', 'label1', ' ', ' ');
         #BETREUUNG VON
-        $mform->addElement('static', 'label1', 'Themenbereiche des Betreuers:');
+        $mform->addElement('static', 'label1', 'Themenbereiche des Betreuers');
         #BETREUUNG BACHELORARBEIT
         $mform->addElement('static', 'checkbox_bachelor', 'Steht der Betreuer für Bachelorarbeiten zur Verfügung?');
         #BETREUUNGSZEITRAUM
-        $mform->addElement('static', 'supportperiod', 'Bewertungszeitraum*');
+        $mform->addElement('static', 'supportperiod', 'Bewertungszeitraum');
         #MAX ANZAHL JAHR
-        $mform->addElement('static', 'max_year', 'Max Anzahl Arbeiten pro Jahr*');
+        $mform->addElement('static', 'max_year', 'Max Anzahl Arbeiten pro Jahr');
         #MAX ANZAHL ZEITGLEICH
-        $mform->addElement('static', 'max_attime', 'Max Anzahl Arbeiten zeitgleich*');
-
+        $mform->addElement('static', 'max_attime', 'Max Anzahl Arbeiten zeitgleich');
         #space ---------------------------------------------------------------------------------
-        $mform->addElement('header', 'header6', 'Kommentare');
+        $mform->addElement('static', 'label1', ' ', ' ');
+        #space ---------------------------------------------------------------------------------
+        $mform->addElement('header', 'header6', 'Anmerkungen');
 
         #Comment
         $mform->addElement('textarea', 'comment', 'Kommentar', 'wrap="virtual" rows="6" cols="40"'); // Add elements to your form
         $mform->setType('comment', PARAM_NOTAGS);                   //Set type of element
 
         #space ---------------------------------------------------------------------------------
-        $mform->addElement('static', 'label1', ' ', ' ');
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
+        #space ---------------------------------------------------------------------------------
+        $mform->addElement('hidden', 'applicantid');
+        $mform->setType('applicantid', PARAM_INT);
         #Bearbeiten
         $buttonarray = array();
         $buttonarray[] = $mform->createElement('cancel', 'cancelbutton', 'Zurück');

@@ -13,10 +13,10 @@ global $SESSION;
 echo $OUTPUT->heading('Details');
 
 // Implement form for user
-require_once(__DIR__ . '/forms/detail_supervisor_form.php');
+require_once(__DIR__ . '/forms/edit_supervisor_form.php');
 
 //Form
-$mform = new detail_supervisor_form();
+$mform = new edit_supervisor_form();
 $mform->render();
 
 //Form processing and displaying is done here

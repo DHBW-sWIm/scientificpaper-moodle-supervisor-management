@@ -98,7 +98,7 @@ class new_supervisor_form extends moodleform {
                 array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'));
 
         #space ---------------------------------------------------------------------------------
-        $mform->addElement('header', 'header6', 'Kommentare');
+        $mform->addElement('header', 'header6', 'Anmerkungen');
 
         #Comment
         $mform->addElement('textarea', 'comment', 'Kommentar', 'wrap="virtual" rows="6" cols="40"'); // Add elements to your form

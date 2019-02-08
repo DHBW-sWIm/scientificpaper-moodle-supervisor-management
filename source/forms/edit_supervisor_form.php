@@ -1,7 +1,7 @@
 <?php
 require_once("$CFG->libdir/formslib.php");
 
-class detail_supervisor_form extends moodleform {
+class edit_supervisor_form extends moodleform {
 
     public function definition() {
         global $CFG;

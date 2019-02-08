@@ -31,25 +31,26 @@ $data = array('id' => $cm->id);
 if ($applicant) {
     $data = array(
             'id' => $cm->id,
-            "firstname" => $applicant->firstname,
-            "lastname" => $applicant->lastname,
-            "title" => $applicant->title,
-            "gender" => $applicant->gender,
-            "birthdate" => strftime('%d.%m.%Y', $applicant->birthdate),
-            "languages" => $applicant->languages,
-            "company" => $applicant->company,
-            "address" => $applicant->address,
-            "city" => $applicant->city,
-            "postalcode" => $applicant->postalcode,
+            'applicantid' => $applicantid,
+            'firstname' => $applicant->firstname,
+            'lastname' => $applicant->lastname,
+            'title' => $applicant->title,
+            'gender' => $applicant->gender,
+            'birthdate' => strftime('%d.%m.%Y', $applicant->birthdate),
+            'languages' => $applicant->languages,
+            'company' => $applicant->company,
+            'address' => $applicant->address,
+            'city' => $applicant->city,
+            'postalcode' => $applicant->postalcode,
             "phone" => $applicant->phone,
-            "email" => $applicant->email,
-            "iban" => $applicant->iban,
-            "specialisation" => $applicant->specialisation,
-            "supportperiod" => $applicant->supportperiod,
-            "max_year" => $applicant->peryear,
-            "max_attime" => $applicant->atthesametime,
-            "timecreated" => strftime('%d.%m.%Y', $applicant->timecreated),
-            "timemodified" => strftime('%d.%m.%Y', $applicant->timemodified),
+            'email' => $applicant->email,
+            'iban' => $applicant->iban,
+            'specialisation' => $applicant->specialisation,
+            'supportperiod' => $applicant->supportperiod,
+            'max_year' => $applicant->peryear,
+            'max_attime' => $applicant->atthesametime,
+            'timecreated' => strftime('%d.%m.%Y', $applicant->timecreated),
+            'timemodified' => strftime('%d.%m.%Y', $applicant->timemodified),
     );
 }
 
@@ -66,36 +67,44 @@ if ($mform->is_cancelled()) {
     //Handle form cancel operation, if cancel button is present on form
 } else if ($fromform = $mform->get_data()) {
     //Handle form successful operation, if button is present on form
-    //Save application
-    //$table = 'spsupman_supervisors';
-    //$record = new stdClass();
-    //$record->firstname = $fromform->firstname;
-    //$record->lastname = $fromform->lastname;
-    //$record->title = $fromform->title;
-    //$record->gender = $fromform->gender;
-    //$record->birthdate = $fromform->birthdate;
-    //$record->languages = $fromform->languages;
-    //$record->company = $fromform->company;
-    //$record->address = $fromform->address;
-    //$record->city = $fromform->city;
-    //$record->postalcode = $fromform->postalcode;
-    //$record->phone = $fromform->phone;
-    //$record->email = $fromform->email;
-    //$record->iban = $fromform->iban;
-    //// $record->studium=$fromform->studium; FEHLT NOCH IN DER DB!!!
-    //$record->specialisation = $fromform->specialisation;
-    //$record->topictype = $fromform->specialisation;
-    //$record->supportperiod = $fromform->supportperiod;
-    //$record->bachelor = '';
-    //$record->peryear = $fromform->max_year;
-    //$record->atthesametime = $fromform->max_attime;
-    //$record->timecreated = time();
-    //$record->timemodified = time();
-    //$lastinsertid = $DB->insert_record($table, $record, false);
-    ////Delete
-    //$table = 'spsupman_applicant';
-    //$params = array('id' => $applicantid);
-    //$DB->delete_records($table, $params);
+
+    //Get Applicant ID from URL
+    $applicantid = $fromform->applicantid;
+
+    //Get Supervisor Data
+    $table = 'spsupman_applicant';
+    $params = array('id' => $applicantid);
+    $applicant = $DB->get_record($table, $params);
+    //Save applicant
+    $table = 'spsupman_supervisors';
+    $record = new stdClass();
+    $record->firstname = $applicant->firstname;
+    $record->lastname = $applicant->lastname;
+    $record->title = $applicant->title;
+    $record->gender = $applicant->gender;
+    $record->birthdate = $applicant->birthdate;
+    $record->languages = $applicant->languages;
+    $record->company = $applicant->company;
+    $record->address = $applicant->address;
+    $record->city = $applicant->city;
+    $record->postalcode = $applicant->postalcode;
+    $record->phone = $applicant->phone;
+    $record->email = $applicant->email;
+    $record->iban = $applicant->iban;
+    // $record->studium=$fromform->studium; FEHLT NOCH IN DER DB!!!
+    $record->specialisation = $applicant->specialisation;
+    $record->topictype = $applicant->topictype;
+    $record->supportperiod = $applicant->supportperiod;
+    $record->bachelor = '';
+    $record->peryear = $applicant->peryear;
+    $record->atthesametime = $applicant->atthesametime;
+    $record->timecreated = time();
+    $record->timemodified = time();
+    $lastinsertid = $DB->insert_record($table, $record, false);
+    //Delete
+    $table = 'spsupman_applicant';
+    $params = array('id' => $applicantid);
+    $DB->delete_records($table, $params);
     //// Redirect to the course result page.
     $returnurl = new moodle_url('/mod/spsupman/view.php', array('id' => $cm->id));
     redirect($returnurl);

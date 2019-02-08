@@ -17,7 +17,7 @@ $applicant = $DB->get_record($table, $params);
 $DB->delete_records($table, $params);
 
 echo $OUTPUT->heading('Der Bewerber wurde erfolgreich gelöscht.');
-echo $OUTPUT->heading('Name: ' . $applicant->firstname . ' ' . $applicant>lastname);
+echo $OUTPUT->heading('Name: ' . $applicant->firstname . ' ' . $applicant->lastname);
 echo $OUTPUT->heading('Email: ' . $applicant->email);
 
 echo $OUTPUT->single_button(new moodle_url('/mod/spsupman/view.php', array('id' => $cm->id)),

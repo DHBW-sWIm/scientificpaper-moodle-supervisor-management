@@ -79,7 +79,7 @@ class show_supervisor_form extends moodleform {
         $mform->addElement('static', 'max_attime', 'Max Anzahl Arbeiten zeitgleich*');
 
         #space ---------------------------------------------------------------------------------
-        $mform->addElement('header', 'header6', 'Kommentare');
+        $mform->addElement('header', 'header6', 'Anmerkungen');
 
         #Comment
         $mform->addElement('static', 'comment', 'Kommentar'); // Add elements to your form
